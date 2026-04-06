@@ -50,6 +50,14 @@ Ornek degiskenler `.env.example` dosyasinda bulunur.
 - `EMAIL_HOST_USER`
 - `EMAIL_HOST_PASSWORD`
 
+## Ekran Goruntuleri
+
+Asagidaki alan, uygulama ekran goruntulerini sergilemek icindir:
+
+![Ana Sayfa Onizleme](docs/images/ana-sayfa.png)
+
+Not: `docs/images/ana-sayfa.png` dosyasini ekledigin zaman GitHub ana sayfasinda otomatik gorunecektir.
+
 ## Guvenlik Notu
 
 Bu repoda gizli bilgi tutulmaz. `SECRET_KEY` ve e-posta SMTP bilgileri ortam degiskenlerinden okunur.
