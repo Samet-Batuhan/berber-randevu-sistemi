@@ -1,0 +1,282 @@
+{% extends 'berber/base.html' %}
+{% load static %}
+{% load translation_tags %}
+
+{% block title %}{% trans "İletişim" language %} - {{ site_ayarlari.site_adi|default:"Berber Salonu" }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section" style="min-height: 60vh; padding-top: 100px;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="hero-content">
+                    <h1 class="hero-title">{% trans "İletişim" language %}</h1>
+                    <p class="hero-subtitle">{% trans "Bizimle iletişime geçin, sorularınızı sorun" language %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <!-- İletişim Formu -->
+            <div class="col-lg-8 mb-5">
+                <div class="card shadow">
+                    <div class="card-header" style="background: var(--gradient-primary); color: var(--white);">
+                        <h3 class="card-title mb-0" style="color: var(--accent-gold) !important; font-weight: 600;">
+                            <i class="fas fa-envelope me-2" style="color: var(--accent-gold);"></i>{% trans "Mesaj Gönder" language %}
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="{{ form.ad.id_for_label }}" class="form-label">{{ form.ad.label }}</label>
+                                    {{ form.ad }}
+                                    {% if form.ad.errors %}
+                                        <div class="text-danger small">{{ form.ad.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ form.soyad.id_for_label }}" class="form-label">{{ form.soyad.label }}</label>
+                                    {{ form.soyad }}
+                                    {% if form.soyad.errors %}
+                                        <div class="text-danger small">{{ form.soyad.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.telefon.id_for_label }}" class="form-label d-block">
+                                        {{ form.telefon.label }}
+                                    </label>
+                                    <div>
+                                        {{ form.telefon }}
+                                    </div>
+                                    {% if form.telefon.errors %}
+                                        <div class="text-danger small mt-1">{{ form.telefon.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                                    {{ form.email }}
+                                    {% if form.email.errors %}
+                                        <div class="text-danger small">{{ form.email.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.konu.id_for_label }}" class="form-label">{{ form.konu.label }}</label>
+                                {{ form.konu }}
+                                {% if form.konu.errors %}
+                                    <div class="text-danger small">{{ form.konu.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.mesaj.id_for_label }}" class="form-label">{{ form.mesaj.label }}</label>
+                                {{ form.mesaj }}
+                                {% if form.mesaj.errors %}
+                                    <div class="text-danger small">{{ form.mesaj.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-grid" >
+                                <button type="submit" class="btn btn-primary btn-lg" >
+                                    <i class="fas fa-paper-plane me-2" ></i>{% trans "Mesaj Gönder" language %}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- İletişim Bilgileri -->
+            <div class="col-lg-4">
+                <div class="card shadow">
+                    <div class="card-header" style="background: var(--gradient-primary); color: var(--white);">
+                        <h3 class="card-title mb-0" style="color: var(--accent-gold) !important; font-weight: 600;">
+                            <i class="fas fa-info-circle me-2" style="color: var(--accent-gold);"></i>{% trans "İletişim Bilgileri" language %}
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        {% if site_ayarlari %}
+                            <div class="mb-4">
+                                <h5 class="text-gold">
+                                    <i class="fas fa-mobile-alt me-2"></i>{% trans "Cep Telefonu" language %}
+                                </h5>
+                                <p class="mb-0">
+                                    <a href="tel:{{ site_ayarlari.telefon }}" class="phone-link-contact">
+                                        {{ site_ayarlari.telefon }}
+                                    </a>
+                                </p>
+                            </div>
+                            
+                            {% if site_ayarlari.dukkan_telefon %}
+                            <div class="mb-4">
+                                <h5 class="text-gold">
+                                    <i class="fas fa-phone me-2"></i>{% trans "Dükkan Telefonu" language %}
+                                </h5>
+                                <p class="mb-0">
+                                    <a href="tel:{{ site_ayarlari.dukkan_telefon }}" class="phone-link-contact">
+                                        {{ site_ayarlari.dukkan_telefon }}
+                                    </a>
+                                </p>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="mb-4">
+                                <h5 class="text-gold">
+                                    <i class="fas fa-envelope me-2"></i>{% trans "E-posta" language %}
+                                </h5>
+                                <p class="mb-0">
+                                    <a href="mailto:{{ site_ayarlari.email }}" class="email-link-contact">
+                                        {{ site_ayarlari.email }}
+                                    </a>
+                                </p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5 class="text-gold">
+                                    <i class="fas fa-map-marker-alt me-2"></i>{% trans "Adres" language %}
+                                </h5>
+                                <p class="mb-0" style="white-space: pre-line;">{{ site_ayarlari.adres }}</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5 class="text-gold">
+                                    <i class="fas fa-clock me-2"></i>{% trans "Çalışma Saatleri" language %}
+                                </h5>
+                                <p class="mb-0" style="white-space: pre-line;">{% trans_multiline site_ayarlari.calisma_saatleri language %}</p>
+                            </div>
+                            
+                            {% if site_ayarlari.facebook or site_ayarlari.instagram or site_ayarlari.twitter %}
+                            <div class="mb-4">
+                                <h5 class="text-gold">
+                                    <i class="fas fa-share-alt me-2"></i>{% trans "Sosyal Medya" language %}
+                                </h5>
+                                <div class="d-flex gap-3">
+                                    {% if site_ayarlari.facebook %}
+                                        <a href="{{ site_ayarlari.facebook }}" class="text-gold">
+                                            <i class="fab fa-facebook fa-2x"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if site_ayarlari.instagram %}
+                                        <a href="{{ site_ayarlari.instagram }}" class="text-gold">
+                                            <i class="fab fa-instagram fa-2x"></i>
+                                        </a>
+                                    {% endif %}
+                                    {% if site_ayarlari.twitter %}
+                                        <a href="{{ site_ayarlari.twitter }}" class="text-gold">
+                                            <i class="fab fa-twitter fa-2x"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% else %}
+                            <p class="text-muted">{% trans "İletişim bilgileri henüz eklenmemiş." language %}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Google Maps Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header" style="background: var(--gradient-primary); color: var(--white);">
+                        <h3 class="card-title mb-0" style="color: var(--accent-gold) !important; font-weight: 600;">
+                            <i class="fas fa-map-marked-alt me-2" style="color: var(--accent-gold);"></i>{% trans "Konumumuz" language %}
+                        </h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="map-container" style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%; overflow: hidden;">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d5278.492988633116!2d8.600498!3d48.585979!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4797471789e0914f%3A0xc5ab67224c5ac002!2sBarbiershopABDI%202015!5e0!3m2!1sde!2sde!4v1761131212647!5m2!1sde!2sde" 
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section" style="background: var(--gradient-primary); color: var(--white);">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3 class="mb-3" style="color: var(--accent-gold);">{% trans "Hemen Randevu Alın!" language %}</h3>
+                <p class="mb-0" style="opacity: 0.9;">{% trans "Profesyonel hizmetimizden yararlanmak için hemen randevu alın." language %}</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'randevu_al' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-calendar-plus me-2"></i>{% trans "Randevu Al" language %}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Telefon numarası inputunu bulun
+    const phoneInput = document.querySelector('input[name="telefon"]');
+    
+    if (phoneInput) {
+        // intl-tel-input ile başlat
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "de",  // Almanya varsayılan
+            preferredCountries: ["de", "tr", "at", "ch"],  // Almanya, Türkiye, Avusturya, İsviçre öncelikli
+            separateDialCode: true,  // Ülke kodunu ayrı göster
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/js/utils.js",
+            formatOnDisplay: true,
+            autoPlaceholder: "polite",
+            customPlaceholder: function(selectedCountryPlaceholder, selectedCountryData) {
+                return selectedCountryPlaceholder;
+            }
+        });
+        
+        // Form submit edildiğinde tam formatı gönder
+        const form = phoneInput.closest('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                // Tam uluslararası formatı al ve inputa yaz
+                const fullNumber = iti.getNumber();
+                phoneInput.value = fullNumber;
+            });
+        }
+        
+        // Validasyon: Geçersiz numara girilirse uyar
+        phoneInput.addEventListener('blur', function() {
+            if (phoneInput.value.trim()) {
+                if (!iti.isValidNumber()) {
+                    phoneInput.setCustomValidity('Geçerli bir telefon numarası giriniz.');
+                    phoneInput.reportValidity();
+                } else {
+                    phoneInput.setCustomValidity('');
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

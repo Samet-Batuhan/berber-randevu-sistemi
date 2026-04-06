@@ -1,0 +1,592 @@
+{% extends 'berber/base.html' %}
+{% load static %}
+{% load translation_tags %}
+
+{% block title %}{% trans "Randevu Al" language %} - {{ site_ayarlari.site_adi|default:"Berber Salonu" }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section" style="min-height: 60vh; padding-top: 100px;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="hero-content">
+                    <h1 class="hero-title">{% trans "Randevu Al" language %}</h1>
+                    <p class="hero-subtitle">{% trans "Profesyonel hizmetimizden yararlanmak için randevu alın" language %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Appointment Section -->
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-header" style="background: var(--gradient-primary); color: var(--white);">
+                        <h3 class="card-title mb-0" style="color: var(--accent-gold) !important; font-weight: 600;">
+                            <i class="fas fa-calendar-plus me-2" style="color: var(--accent-gold);"></i>{% trans "Randevu Al" language %}
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" id="randevuForm" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            
+                            <!-- Kişisel Bilgiler -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-gold mb-3">
+                                        <i class="fas fa-user me-2"></i>{% trans "Kişisel Bilgiler" language %}
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.ad.id_for_label }}" class="form-label">{{ form.ad.label }}</label>
+                                    {{ form.ad }}
+                                    {% if form.ad.errors %}
+                                        <div class="text-danger small">{{ form.ad.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.soyad.id_for_label }}" class="form-label">{{ form.soyad.label }}</label>
+                                    {{ form.soyad }}
+                                    {% if form.soyad.errors %}
+                                        <div class="text-danger small">{{ form.soyad.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.telefon.id_for_label }}" class="form-label d-block">
+                                        {{ form.telefon.label }}
+                                    </label>
+                                    <div>
+                                    {{ form.telefon }}
+                                    </div>
+                                    {% if form.telefon.errors %}
+                                        <div class="text-danger small mt-1">{{ form.telefon.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                                    {{ form.email }}
+                                    {% if form.email.errors %}
+                                        <div class="text-danger small">{{ form.email.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Randevu Bilgileri -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h5 class="text-gold mb-3">
+                                        <i class="fas fa-calendar me-2"></i>{% trans "Randevu Bilgileri" language %}
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.berber.id_for_label }}" class="form-label">{{ form.berber.label }}</label>
+                                    {{ form.berber }}
+                                    {% if form.berber.errors %}
+                                        <div class="text-danger small">{{ form.berber.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label d-block">{{ form.hizmetler.label }}</label>
+                                    <div class="hizmetler-checkbox-group">
+                                        {% for hizmet in hizmetler %}
+                                        <div class="form-check hizmet-checkbox">
+                                            <input class="form-check-input hizmet-check" type="checkbox" name="hizmetler" value="{{ hizmet.id }}" id="hizmet_{{ hizmet.id }}" data-fiyat="{{ hizmet.fiyat }}" data-sure="{{ hizmet.sure_dakika }}" data-ad="{{ hizmet.ad }}">
+                                            <label class="form-check-label" for="hizmet_{{ hizmet.id }}">
+                                                <strong>{{ hizmet.ad }}</strong>
+                                                <span class="text-muted ms-2">({{ hizmet.fiyat }}€ - {{ hizmet.sure_dakika }} {% trans "dakika" language %})</span>
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% if form.hizmetler.errors %}
+                                        <div class="text-danger small">{{ form.hizmetler.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <!-- Tarih Seçimi -->
+                                <div class="col-12 mb-4">
+                                    <label class="form-label d-block mb-3">
+                                        <i class="fas fa-calendar-alt me-2"></i>{{ form.tarih.label }}
+                                    </label>
+                                    <input type="hidden" name="{{ form.tarih.name }}" id="{{ form.tarih.id_for_label }}" required>
+                                    
+                                    <div class="appointment-calendar">
+                                        <div class="calendar-weeks" id="calendarContainer"></div>
+                                    </div>
+                                    
+                                    {% if form.tarih.errors %}
+                                        <div class="text-danger small mt-2">{{ form.tarih.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Saat Seçimi -->
+                                <div class="col-12 mb-3" id="saatContainer" style="display: none;">
+                                    <label class="form-label d-block mb-3">
+                                        <i class="fas fa-clock me-2"></i>{{ form.saat.label }}
+                                    </label>
+                                    <input type="hidden" name="{{ form.saat.name }}" id="{{ form.saat.id_for_label }}" required>
+                                    
+                                    <div class="appointment-times">
+                                        <div id="saatBaslik" class="time-header"></div>
+                                        <div id="saatSlots" class="time-slots"></div>
+                                    </div>
+                                    
+                                    {% if form.saat.errors %}
+                                        <div class="text-danger small mt-2">{{ form.saat.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="{{ form.notlar.id_for_label }}" class="form-label">{{ form.notlar.label }}</label>
+                                    {{ form.notlar }}
+                                    {% if form.notlar.errors %}
+                                        <div class="text-danger small">{{ form.notlar.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Hizmet Fiyat Bilgisi -->
+                            <div class="card border-0 shadow-sm" id="fiyatBilgisi" style="display: none; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
+                                <div class="card-body">
+                                    <h5 class="text-gold mb-3">
+                                        <i class="fas fa-receipt me-2"></i>{% trans "Randevu Özeti" language %}
+                                    </h5>
+                                    
+                                    <div id="secilenHizmetlerListesi" class="mb-3"></div>
+                                    
+                                    <hr class="my-3" style="border-top: 2px dashed var(--accent-gold);">
+                                    
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="text-muted">
+                                                    <i class="fas fa-clock me-2"></i>{% trans "Toplam Süre:" language %}
+                                                </span>
+                                                <strong class="text-primary"><span id="toplamSure">0</span> {% trans "dakika" language %}</strong>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="toplam-fiyat-box">
+                                                <span class="toplam-fiyat-label">{% trans "Toplam Fiyat:" language %}</span>
+                                                <span class="toplam-fiyat-tutar">
+                                                    <span id="toplamFiyat">0</span>€
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Form Hataları -->
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.non_field_errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg" id="randevuSubmitBtn">
+                                    <i class="fas fa-calendar-check me-2"></i>{% trans "Randevu Al" language %}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Telefon numarası inputunu bulun ve uluslararası format ekleyin
+    const phoneInput = document.querySelector('input[name="telefon"]');
+    
+    if (phoneInput) {
+        // intl-tel-input ile başlat
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "de",  // Almanya varsayılan
+            preferredCountries: ["de", "tr", "at", "ch"],  // Almanya, Türkiye, Avusturya, İsviçre öncelikli
+            separateDialCode: true,  // Ülke kodunu ayrı göster
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@19.5.6/build/js/utils.js",
+            formatOnDisplay: true,
+            autoPlaceholder: "polite",
+            customPlaceholder: function(selectedCountryPlaceholder, selectedCountryData) {
+                return selectedCountryPlaceholder;
+            }
+        });
+        
+        // Form submit edildiğinde tam formatı gönder
+        const form = phoneInput.closest('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                // Tam uluslararası formatı al ve inputa yaz
+                const fullNumber = iti.getNumber();
+                phoneInput.value = fullNumber;
+            });
+        }
+        
+        // Validasyon: Geçersiz numara girilirse uyar
+        phoneInput.addEventListener('blur', function() {
+            if (phoneInput.value.trim()) {
+                if (!iti.isValidNumber()) {
+                    phoneInput.setCustomValidity('Geçerli bir telefon numarası giriniz.');
+                    phoneInput.reportValidity();
+                } else {
+                    phoneInput.setCustomValidity('');
+                }
+            }
+        });
+    }
+    
+    const fiyatBilgisi = document.getElementById('fiyatBilgisi');
+    const secilenHizmetlerListesi = document.getElementById('secilenHizmetlerListesi');
+    const toplamFiyat = document.getElementById('toplamFiyat');
+    const toplamSure = document.getElementById('toplamSure');
+    
+    // Hizmet checkbox'ları
+    const hizmetCheckboxes = document.querySelectorAll('.hizmet-check');
+    
+    function updateFiyatBilgisi() {
+        const selectedHizmetler = [];
+        let totalFiyat = 0;
+        let totalSure = 0;
+        
+        hizmetCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                const hizmetAd = checkbox.dataset.ad;  // Çevirili ad'ı data-ad'den al
+                const hizmetFiyat = parseFloat(checkbox.dataset.fiyat);
+                const hizmetSure = parseInt(checkbox.dataset.sure);
+                
+                selectedHizmetler.push({
+                    ad: hizmetAd,
+                    fiyat: hizmetFiyat,
+                    sure: hizmetSure
+                });
+                
+                totalFiyat += hizmetFiyat;
+                totalSure += hizmetSure;
+            }
+        });
+        
+        if (selectedHizmetler.length > 0) {
+            // Seçilen hizmetler listesini oluştur
+            let listHTML = '<strong>{% trans "Seçilen Hizmetler:" language %}</strong><ul class="mb-0 mt-2">';
+            selectedHizmetler.forEach(h => {
+                listHTML += `<li>${h.ad} - ${h.fiyat}€ (${h.sure} {% trans "dakika" language %})</li>`;
+            });
+            listHTML += '</ul>';
+            
+            secilenHizmetlerListesi.innerHTML = listHTML;
+            toplamFiyat.textContent = totalFiyat.toFixed(2);
+            toplamSure.textContent = totalSure;
+            fiyatBilgisi.style.display = 'block';
+        } else {
+            fiyatBilgisi.style.display = 'none';
+        }
+    }
+    
+    // Checkbox'lara event listener ekle
+    hizmetCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateFiyatBilgisi);
+    });
+    
+    // ===== MODERN TAKVİM VE SAAT SEÇİCİ =====
+    const tarihInput = document.getElementById('{{ form.tarih.id_for_label }}');
+    const saatInput = document.getElementById('{{ form.saat.id_for_label }}');
+    const berberSelect = document.getElementById('{{ form.berber.id_for_label }}');
+    const calendarContainer = document.getElementById('calendarContainer');
+    const saatContainer = document.getElementById('saatContainer');
+    const saatSlots = document.getElementById('saatSlots');
+    const saatBaslik = document.getElementById('saatBaslik');
+    
+    // Çalışma saatleri tanımları
+    const workingHours = {
+        1: { open: true, start: '09:00', end: '19:00' },  // Pazartesi
+        2: { open: false },  // Salı - Kapalı
+        3: { open: true, start: '09:00', end: '19:00' },  // Çarşamba
+        4: { open: true, start: '09:00', end: '19:00' },  // Perşembe
+        5: { open: true, start: '09:00', end: '19:00' },  // Cuma
+        6: { open: true, start: '09:00', end: '16:00' },  // Cumartesi
+        0: { open: false }  // Pazar - Kapalı
+    };
+    
+    // Seçilen dil
+    const currentLanguage = '{{ language }}';
+    
+    // Gün isimleri - Dil bazlı
+    const gunIsimleriDil = {
+        'de': ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+        'tr': ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'],
+        'en': ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    };
+    
+    // Ay isimleri - Dil bazlı
+    const ayIsimleriDil = {
+        'de': ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+        'tr': ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'],
+        'en': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    };
+    
+    const gunIsimleri = gunIsimleriDil[currentLanguage] || gunIsimleriDil['de'];
+    const ayIsimleri = ayIsimleriDil[currentLanguage] || ayIsimleriDil['de'];
+    
+    let selectedDate = null;
+    let selectedTime = null;
+    
+    // Bir günün tüm saatlerini hesapla
+    function getTotalSlotsForDay(dayOfWeek) {
+        const hours = workingHours[dayOfWeek];
+        if (!hours.open) return 0;
+        
+        const startHour = parseInt(hours.start.split(':')[0]);
+        const endHour = parseInt(hours.end.split(':')[0]);
+        
+        // Her saat için 2 slot (00 ve 30)
+        return (endHour - startHour) * 2;
+    }
+    
+    // Tam dolu günleri kontrol et
+    async function checkFullyBookedDays() {
+        const berberId = berberSelect.value;
+        if (!berberId) return;
+        
+        const today = new Date();
+        today.setHours(12, 0, 0, 0);  // Öğlen saati - timezone sorunlarını önler
+        
+        // Her gün için kontrol et
+        for (let i = 0; i < 14; i++) {
+            const date = new Date(today);
+            date.setDate(today.getDate() + i);
+            const dateStr = date.toISOString().split('T')[0];
+            const dayOfWeek = date.getDay();
+            
+            // Kapalı günleri atla
+            if (!workingHours[dayOfWeek].open) continue;
+            
+            // O gün için toplam slot sayısı
+            const totalSlots = getTotalSlotsForDay(dayOfWeek);
+            
+            try {
+                const response = await fetch('/ajax/randevu-kontrol/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                        tarih: dateStr,
+                    berber_id: berberId
+                })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const doluSaatler = data.dolu_saatler || [];
+                    
+                    // Eğer dolu saat sayısı toplam slot sayısına eşitse gün tamamen dolu
+                    if (doluSaatler.length >= totalSlots) {
+                        const dayBox = document.querySelector(`.day-box[data-date="${dateStr}"]`);
+                        if (dayBox) {
+                            dayBox.classList.add('fully-booked');
+                            dayBox.classList.remove('available');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Tam dolu günleri kontrol ederken hata:', error);
+            }
+        }
+    }
+    
+    async function renderCalendar() {
+        const today = new Date();
+        today.setHours(12, 0, 0, 0);  // Öğlen saati - timezone sorunlarını önler
+        
+        let html = '';
+        
+        // 2 hafta göster, her hafta ayrı satır
+        for (let week = 0; week < 2; week++) {
+            html += '<div class="calendar-week">';
+            
+            for (let day = 0; day < 7; day++) {
+                const i = week * 7 + day;
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                
+                const dayOfWeek = date.getDay();
+                const dateStr = date.toISOString().split('T')[0];
+                const isOpen = workingHours[dayOfWeek].open;
+                const isToday = i === 0;
+                const isSelected = selectedDate && selectedDate.toDateString() === date.toDateString();
+                
+                let classList = ['day-box'];
+                if (isOpen) classList.push('available');
+                else classList.push('closed');
+                if (isSelected) classList.push('selected');
+                if (isToday) classList.push('today');
+                
+                html += `<div class="${classList.join(' ')}" data-date="${dateStr}" data-day="${dayOfWeek}">`;
+                html += `<div class="day-label">${gunIsimleri[dayOfWeek]}</div>`;
+                html += `<div class="day-date">${date.getDate()}</div>`;
+                html += `<div class="day-month-label">${ayIsimleri[date.getMonth()]}</div>`;
+                html += '</div>';
+            }
+            
+            html += '</div>';
+        }
+        
+        calendarContainer.innerHTML = html;
+        
+        // Tam dolu günleri kontrol et
+        await checkFullyBookedDays();
+        
+        // Tarih seçme event'leri
+        document.querySelectorAll('.day-box.available').forEach(day => {
+            day.addEventListener('click', function() {
+                const dateStr = this.dataset.date;
+                const dayOfWeek = parseInt(this.dataset.day);
+                
+                document.querySelectorAll('.day-box').forEach(d => d.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                selectedDate = new Date(dateStr + 'T12:00:00');
+                tarihInput.value = dateStr;
+                
+                renderTimeSlots(dayOfWeek, dateStr);
+            });
+        });
+    }
+    
+    async function renderTimeSlots(dayOfWeek, dateStr) {
+        const hours = workingHours[dayOfWeek];
+        if (!hours.open) return;
+        
+        const startHour = parseInt(hours.start.split(':')[0]);
+        const endHour = parseInt(hours.end.split(':')[0]);
+        
+        // Timezone sorunu için T12:00:00 ekle
+        const dateObj = new Date(dateStr + 'T12:00:00');
+        const formattedDate = `${gunIsimleri[dayOfWeek]}, ${dateObj.getDate()}. ${ayIsimleri[dateObj.getMonth()]}`;
+        
+        // Saat başlığı çevirisi
+        const saatBaslikMetni = {
+            'de': 'Wählen Sie eine Uhrzeit für',
+            'tr': 'için bir saat seçin:',
+            'en': 'Select a time for'
+        };
+        
+        const baslik = saatBaslikMetni[currentLanguage] || saatBaslikMetni['de'];
+        
+        saatSlots.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</div>';
+        
+        // Türkçe için farklı sıralama
+        if (currentLanguage === 'tr') {
+            saatBaslik.innerHTML = `<i class="fas fa-info-circle me-2"></i><strong>${formattedDate}</strong> ${baslik}`;
+        } else {
+            saatBaslik.innerHTML = `<i class="fas fa-info-circle me-2"></i>${baslik} <strong>${formattedDate}</strong>`;
+        }
+        
+        // Dolu saatleri backend'den al
+        let doluSaatler = [];
+        const berberId = berberSelect.value;
+        
+        if (berberId) {
+            try {
+                const response = await fetch('/ajax/randevu-kontrol/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        tarih: dateStr,
+                        berber_id: berberId
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    doluSaatler = data.dolu_saatler || [];
+                }
+            } catch (error) {
+                console.error('Dolu saatleri alırken hata:', error);
+            }
+        }
+        
+        saatSlots.innerHTML = '';
+        
+        const times = [];
+        for (let hour = startHour; hour < endHour; hour++) {
+            times.push(`${hour.toString().padStart(2, '0')}:00`);
+            times.push(`${hour.toString().padStart(2, '0')}:30`);
+        }
+        
+        times.forEach(time => {
+            const slot = document.createElement('div');
+            const isDolu = doluSaatler.includes(time);
+            
+            slot.className = isDolu ? 'time-box dolu' : 'time-box';
+            slot.textContent = time;
+            slot.dataset.time = time;
+            
+            if (isDolu) {
+                slot.style.cursor = 'not-allowed';
+                slot.title = 'Bu saat dolu';
+            } else {
+                slot.addEventListener('click', function() {
+                    document.querySelectorAll('.time-box:not(.dolu)').forEach(s => s.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedTime = time;
+                    saatInput.value = time;
+                });
+            }
+            
+            saatSlots.appendChild(slot);
+        });
+        
+        saatContainer.style.display = 'block';
+        saatContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    
+    // Berber değiştiğinde takvimi ve saatleri yenile
+    berberSelect.addEventListener('change', async function() {
+        // Takvimi yeniden render et (tam dolu günler için)
+        await renderCalendar();
+        
+        // Eğer tarih seçiliyse saatleri de yenile
+        if (selectedDate && tarihInput.value) {
+            const dayOfWeek = selectedDate.getDay();
+            await renderTimeSlots(dayOfWeek, tarihInput.value);
+        }
+    });
+    
+    // Takvimi başlat
+    renderCalendar();
+    
+    // Form submit olduğunda butonu disable et ve loading göster
+    const randevuForm = document.querySelector('form');
+    const submitBtn = document.getElementById('randevuSubmitBtn');
+    
+    if (randevuForm && submitBtn) {
+        randevuForm.addEventListener('submit', function(e) {
+            // Form validasyonunu kontrol et
+            if (randevuForm.checkValidity()) {
+                // Buton zaten disabled ise tekrar işlem yapma
+                if (!submitBtn.disabled) {
+                    submitBtn.disabled = true;
+                    // Sadece spinner ikonu göster
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                }
+            }
+        });
+    }
+});
+
+</script>
+{% endblock %}

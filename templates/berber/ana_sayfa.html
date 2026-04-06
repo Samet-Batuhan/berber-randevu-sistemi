@@ -1,0 +1,308 @@
+{% extends 'berber/base.html' %}
+{% load static %}
+{% load translation_tags %}
+
+{% block title %}{{ site_ayarlari.site_adi|default:"Berber Salonu" }} - {% trans "Ana Sayfa" language %}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        {% if site_ayarlari %}{{ site_ayarlari.site_adi }}{% else %}Elite Berber Salonu{% endif %}
+                    </h1>
+                    <p class="hero-subtitle">
+                        {% if site_ayarlari and site_ayarlari.aciklama %}{% trans site_ayarlari.aciklama language %}{% else %}{% trans "Profesyonel berber hizmetleri ile en iyi görünümünüzü ortaya çıkarın. Deneyimli ekibimiz ve modern tekniklerimizle hizmetinizdeyiz." language %}{% endif %}
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="{% url 'randevu_al' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-calendar-plus me-2"></i>{% trans "Randevu Al" language %}
+                        </a>
+                        <a href="{% url 'fiyat_listesi' %}" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-list me-2"></i>{% trans "Fiyat Listesi" language %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image text-center">
+                    <img src="{% static 'images/barbiershopabdi.svg' %}" alt="Berber Logo" style="max-width: 300px; max-height: 300px; width: auto; height: auto;">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Video Section -->
+<section class="section video-section">
+    <div class="container">
+        <div class="section-title text-center">
+            <h2>{% trans "Salonumuz" language %}</h2>
+            <p class="lead">{% trans "Modern ve konforlu ortamımızı keşfedin" language %}</p>
+        </div>
+        <div class="video-container">
+            <video controls class="salon-video" preload="metadata">
+                <source src="{% static 'images/Dükkan_Gezinti_Videosu_Oluşturuldu.mp4' %}" type="video/mp4">
+                {% trans "Tarayıcınız video oynatmayı desteklemiyor." language %}
+            </video>
+        </div>
+    </div>
+</section>
+
+<!-- Hizmetler Section -->
+<section class="section services-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>{% trans "Hizmetlerimiz" language %}</h2>
+            <p class="lead">{% trans "Size özel profesyonel berber hizmetleri" language %}</p>
+        </div>
+        
+        {% if hizmetler_grouped_desktop %}
+        
+        <!-- Desktop Carousel (3 hizmet yan yana) -->
+        <div id="servicesCarouselDesktop" class="carousel slide d-none d-lg-block" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-inner">
+                {% for group in hizmetler_grouped_desktop %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row justify-content-center">
+                        {% for hizmet in group %}
+                        <div class="col-lg-4 mb-4">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <img src="{% static 'images/barbiershopabdi.svg' %}" alt="Hizmet" style="width: 40px; height: 40px; object-fit: contain;">
+                    </div>
+                    <h5 class="card-title">{{ hizmet.ad }}</h5>
+                                <p class="card-text">{% if hizmet.aciklama %}{{ hizmet.aciklama|truncatewords:15 }}{% else %}{% trans "Profesyonel berber hizmeti" language %}{% endif %}</p>
+                    <div class="service-price">{{ hizmet.fiyat }}€</div>
+                    <div class="service-duration">
+                        <i class="fas fa-clock me-1"></i>{{ hizmet.sure_dakika }} {% trans "dakika" language %}
+                    </div>
+                </div>
+            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if hizmetler_grouped_desktop|length > 1 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#servicesCarouselDesktop" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Önceki</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#servicesCarouselDesktop" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Sonraki</span>
+            </button>
+            
+            <div class="carousel-indicators">
+                {% for group in hizmetler_grouped_desktop %}
+                <button type="button" data-bs-target="#servicesCarouselDesktop" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></button>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Mobile/Tablet Carousel (1 hizmet) -->
+        <div id="servicesCarouselMobile" class="carousel slide d-lg-none" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-inner">
+                {% for group in hizmetler_grouped_mobile %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row justify-content-center">
+                        {% for hizmet in group %}
+                        <div class="col-12 col-md-8 mb-4">
+                            <div class="service-card">
+                                <div class="service-icon">
+                                    <img src="{% static 'images/barbiershopabdi.svg' %}" alt="Hizmet" style="width: 40px; height: 40px; object-fit: contain;">
+                                </div>
+                                <h5 class="card-title">{{ hizmet.ad }}</h5>
+                                <p class="card-text">{% if hizmet.aciklama %}{{ hizmet.aciklama|truncatewords:15 }}{% else %}{% trans "Profesyonel berber hizmeti" language %}{% endif %}</p>
+                                <div class="service-price">{{ hizmet.fiyat }}€</div>
+                                <div class="service-duration">
+                                    <i class="fas fa-clock me-1"></i>{{ hizmet.sure_dakika }} {% trans "dakika" language %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if hizmetler_grouped_mobile|length > 1 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#servicesCarouselMobile" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Önceki</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#servicesCarouselMobile" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Sonraki</span>
+            </button>
+            
+            <div class="carousel-indicators">
+                {% for group in hizmetler_grouped_mobile %}
+                <button type="button" data-bs-target="#servicesCarouselMobile" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></button>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        
+        <script>
+        // Carousel için keyboard navigation ve smooth animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Desktop carousel
+            const servicesCarouselDesktop = document.getElementById('servicesCarouselDesktop');
+            const servicesCarouselMobile = document.getElementById('servicesCarouselMobile');
+            
+            let activeCarousel = null;
+            
+            if (servicesCarouselDesktop && window.innerWidth >= 992) {
+                activeCarousel = new bootstrap.Carousel(servicesCarouselDesktop, {
+                    interval: 5000,
+                    ride: 'carousel',
+                    touch: true,
+                    pause: 'hover',
+                    wrap: true
+                });
+            }
+            
+            if (servicesCarouselMobile && window.innerWidth < 992) {
+                activeCarousel = new bootstrap.Carousel(servicesCarouselMobile, {
+                    interval: 5000,
+                    ride: 'carousel',
+                    touch: true,
+                    pause: 'hover',
+                    wrap: true
+                });
+            }
+            
+            // Keyboard navigation (arrow keys)
+            if (activeCarousel) {
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'ArrowLeft') {
+                        activeCarousel.prev();
+                    } else if (e.key === 'ArrowRight') {
+                        activeCarousel.next();
+                    }
+                });
+            }
+        });
+        </script>
+        
+        {% else %}
+        <!-- Empty State -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="service-card">
+                    <i class="fas fa-cut fa-3x text-gold mb-3"></i>
+                    <h4 class="text-muted">{% trans "Henüz hizmet eklenmemiş" language %}</h4>
+                    <p class="text-muted">{% trans "Hizmetlerimiz yakında eklenecek." language %}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Randevu Button -->
+        <div class="text-center mt-5">
+            <a href="{% url 'randevu_al' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-calendar-plus me-2"></i>{% trans "Hemen Randevu Alın!" language %}
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Berberler Section -->
+<section class="section team-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>{% trans "Berberlerimiz" language %}</h2>
+            <p class="lead">{% trans "Deneyimli ve profesyonel ekibimiz" language %}</p>
+        </div>
+        <div class="row">
+            {% for berber in berberler %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="team-card">
+                    {% if berber.profil_foto %}
+                        <img src="{{ berber.profil_foto.url }}" class="card-img-top" alt="{{ berber.ad }}" style="height: 300px; object-fit: cover;">
+                    {% else %}
+                        <div class="team-image">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    {% endif %}
+                    <div class="team-info">
+                        <h5 class="team-name">{{ berber.ad }}</h5>
+                        <p class="team-role">{% trans "Profesyonel Berber" language %}</p>
+                        <p class="card-text">{% if berber.aciklama %}{% trans berber.aciklama language %}{% else %}{% trans "Deneyimli berber" language %}{% endif %}</p>
+                        <div class="d-flex justify-content-center">
+                            <a href="{% url 'randevu_al' %}?berber={{ berber.id }}" class="btn btn-primary">{% trans "Randevu Al" language %}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="team-card">
+                    <div class="team-image">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="team-info">
+                        <h4 class="text-muted">Henüz berber eklenmemiş</h4>
+                        <p class="text-muted">Ekibimiz yakında eklenecek.</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Galeri Section -->
+{% if galeri %}
+<section class="section gallery-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>{% trans "Galeri" language %}</h2>
+            <p class="lead">{% trans "Çalışmalarımızdan örnekler" language %}</p>
+        </div>
+        <div class="row">
+            {% for foto in galeri %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gallery-item">
+                    <img src="{{ foto.foto.url }}" class="gallery-image" alt="{{ foto.baslik }}">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ foto.baslik }}</h6>
+                        {% if foto.aciklama %}
+                            <p class="card-text small">{{ foto.aciklama|truncatewords:10 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'galeri' %}" class="btn btn-outline-primary">{% trans "Tüm Galeri" language %}</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- İletişim CTA Section -->
+<section class="section" style="background: var(--gradient-primary); color: var(--white);">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3 class="mb-3" style="color: var(--accent-gold);">{% trans "Randevu Almak İçin Hemen İletişime Geçin!" language %}</h3>
+                <p class="mb-0" style="opacity: 0.9;">{% trans "Profesyonel hizmetimizden yararlanmak için hemen randevu alın." language %}</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'randevu_al' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-calendar-plus me-2"></i>{% trans "Randevu Al" language %}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

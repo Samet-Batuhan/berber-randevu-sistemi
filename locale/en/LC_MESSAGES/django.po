@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 12:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Berber Salonu"
+msgstr "Barber Shop"
+
+msgid "Ana Sayfa"
+msgstr "Home"
+
+msgid "Randevu Al"
+msgstr "Book Appointment"
+
+msgid "Fiyat Listesi"
+msgstr "Price List"
+
+msgid "Galeri"
+msgstr "Gallery"
+
+msgid "İletişim"
+msgstr "Contact"
+
+msgid "Dil"
+msgstr "Language"
+
+msgid "İletişim"
+msgstr "Contact"
+
+msgid "Sosyal Medya"
+msgstr "Social Media"
+
+msgid "Çalışma Saatleri:"
+msgstr "Working Hours:"
+
+msgid "Pazartesi - Cumartesi: 09:00 - 19:00"
+msgstr "Monday - Saturday: 09:00 - 19:00"
+
+msgid "Tüm hakları saklıdır."
+msgstr "All rights reserved."
+
+msgid "Hizmetlerimiz"
+msgstr "Our Services"
+
+msgid "Size özel profesyonel berber hizmetleri"
+msgstr "Professional barber services tailored for you"
+
+msgid "dakika"
+msgstr "minutes"
+
+msgid "Detaylar"
+msgstr "Details"
+
+msgid "Berberlerimiz"
+msgstr "Our Barbers"
+
+msgid "Deneyimli ve profesyonel ekibimiz"
+msgstr "Our experienced and professional team"
+
+msgid "Profesyonel Berber"
+msgstr "Professional Barber"
+
+msgid "Profil"
+msgstr "Profile"
+
+msgid "Çalışmalarımızdan örnekler"
+msgstr "Examples of our work"
+
+msgid "Tüm Galeri"
+msgstr "All Gallery"
+
+msgid "Randevu Almak İçin Hemen İletişime Geçin!"
+msgstr "Contact Us Immediately to Book an Appointment!"
+
+msgid "Profesyonel hizmetimizden yararlanmak için hemen randevu alın."
+msgstr "Take advantage of our professional service and book an appointment immediately."
