@@ -1,0 +1,11 @@
+# Keep GitHub language stats focused on backend code
+templates/** linguist-detectable=false
+**/*.html linguist-detectable=false
+
+static/** linguist-detectable=false
+staticfiles/** linguist-detectable=false
+**/*.css linguist-detectable=false
+**/*.js linguist-detectable=false
+
+media/** linguist-detectable=false
+docs/images/** linguist-detectable=false
