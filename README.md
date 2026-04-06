@@ -52,11 +52,17 @@ Ornek degiskenler `.env.example` dosyasinda bulunur.
 
 ## Ekran Goruntuleri
 
-Asagidaki alan, uygulama ekran goruntulerini sergilemek icindir:
+- Ana Sayfa
+![Ana Sayfa](docs/images/ana-sayfa.png)
 
-![Ana Sayfa Onizleme](docs/images/ana-sayfa.png)
+- Randevu
+![Randevu](docs/images/randevu.png)
 
-Not: `docs/images/ana-sayfa.png` dosyasini ekledigin zaman GitHub ana sayfasinda otomatik gorunecektir.
+- Fiyat Listesi
+![Fiyat Listesi](docs/images/fiyat-listesi.png)
+
+- Admin Paneli
+![Admin Paneli](docs/images/admin-paneli.png)
 
 ## Guvenlik Notu
 
