@@ -1,4 +1,4 @@
-# berber-randevu-sistemi
+# Berber Randevu Sistemi
 
 Django ile gelistirilmis, cok dilli berber randevu ve yonetim paneli uygulamasi.
 
