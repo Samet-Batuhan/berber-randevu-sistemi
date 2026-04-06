@@ -1,48 +1,48 @@
 # Berber Randevu Sistemi
 
-Django ile gelistirilmis, cok dilli berber randevu ve yonetim paneli uygulamasi.
+Django ile geliştirilmiş, çok dilli berber randevu ve yönetim paneli uygulaması.
 
-## Proje Ozeti
+## Proje Özeti
 
-`berber-randevu-sistemi`, musterilerin online randevu alabilecegi ve isletmenin randevulari panel uzerinden yonetebilecegi bir web uygulamasidir.
+`berber-randevu-sistemi`, müşterilerin online randevu alabileceği ve işletmenin randevuları panel üzerinden yönetebileceği bir web uygulamasıdır.
 
-## Ozellikler
+## Özellikler
 
-- Online randevu olusturma ve uygun saat kontrolu
-- Berber panelinden randevu listeleme, filtreleme ve durum guncelleme
-- Coklu hizmet secimi ve toplam fiyat hesaplama
-- Iletisim formu ve SMTP uzerinden e-posta bildirimleri
-- Cok dilli arayuz destegi (TR/EN/DE)
-- Django admin paneli ile icerik ve ayar yonetimi
+- Online randevu oluşturma ve uygun saat kontrolü
+- Berber panelinden randevu listeleme, filtreleme ve durum güncelleme
+- Çoklu hizmet seçimi ve toplam fiyat hesaplama
+- İletişim formu ve SMTP üzerinden e-posta bildirimleri
+- Çok dilli arayüz desteği (TR/EN/DE)
+- Django admin paneli ile içerik ve ayar yönetimi
 
-## Kullanilan Teknolojiler
+## Kullanılan Teknolojiler
 
 - Python 3
 - Django 5.2
-- SQLite (gelistirme ortami)
+- SQLite (geliştirme ortamı)
 - HTML, CSS, JavaScript
 
 ## Yerel Kurulum
 
-1. Depoyu klonlayin:
+1. Depoyu klonlayın:
    - `git clone https://github.com/Samet-Batuhan/berber-randevu-sistemi.git`
    - `cd berber-randevu-sistemi`
-2. Sanal ortami olusturun ve aktif edin:
+2. Sanal ortamı oluşturun ve aktif edin:
    - Windows: `python -m venv venv`
    - Windows: `.\\venv\\Scripts\\activate`
-3. Bagimliliklari yukleyin:
+3. Bağımlılıkları yükleyin:
    - `pip install -r requirements.txt`
-4. Ortam degiskenlerini hazirlayin:
-   - `.env.example` dosyasini `.env` olarak kopyalayin
-   - Gerekli degerleri kendi bilgilerinizle doldurun
-5. Veritabani migrationlarini uygulayin:
+4. Ortam değişkenlerini hazırlayın:
+   - `.env.example` dosyasını `.env` olarak kopyalayın
+   - Gerekli değerleri kendi bilgilerinizle doldurun
+5. Veritabanı migrationlarını uygulayın:
    - `python manage.py migrate`
-6. Uygulamayi calistirin:
+6. Uygulamayı çalıştırın:
    - `python manage.py runserver`
 
-## Ortam Degiskenleri
+## Ortam Değişkenleri
 
-Ornek degiskenler `.env.example` dosyasinda bulunur.
+Örnek değişkenler `.env.example` dosyasında bulunur.
 
 - `DJANGO_SECRET_KEY`
 - `DEBUG`
@@ -50,7 +50,7 @@ Ornek degiskenler `.env.example` dosyasinda bulunur.
 - `EMAIL_HOST_USER`
 - `EMAIL_HOST_PASSWORD`
 
-## Ekran Goruntuleri
+## Ekran Görüntüleri
 
 - Ana Sayfa
 ![Ana Sayfa](docs/images/ana-sayfa.png)
@@ -64,10 +64,10 @@ Ornek degiskenler `.env.example` dosyasinda bulunur.
 - Admin Paneli
 ![Admin Paneli](docs/images/admin-paneli.png)
 
-## Guvenlik Notu
+## Güvenlik Notu
 
-Bu repoda gizli bilgi tutulmaz. `SECRET_KEY` ve e-posta SMTP bilgileri ortam degiskenlerinden okunur.
+Bu repoda gizli bilgi tutulmaz. `SECRET_KEY` ve e-posta SMTP bilgileri ortam değişkenlerinden okunur.
 
 ## Lisans
 
-Bu proje `MIT` lisansi ile paylasilmaktadir. Detaylar icin `LICENSE` dosyasina bakabilirsiniz.
+Bu proje `MIT` lisansı ile paylaşılmaktadır. Detaylar için `LICENSE` dosyasına bakabilirsiniz.
