@@ -1,28 +1,59 @@
 # berber-randevu-sistemi
 
-Django tabanli berber randevu ve yonetim paneli projesi.
+Django ile gelistirilmis, cok dilli berber randevu ve yonetim paneli uygulamasi.
+
+## Proje Ozeti
+
+`berber-randevu-sistemi`, musterilerin online randevu alabilecegi ve isletmenin randevulari panel uzerinden yonetebilecegi bir web uygulamasidir.
 
 ## Ozellikler
 
-- Randevu olusturma ve saat uygunluk kontrolu
-- Berber paneli ile randevu yonetimi
-- Coklu hizmet secimi ve fiyat hesaplama
-- Iletisim formu ve SMTP uzerinden bildirim e-postalari
-- Cok dilli icerik destegi (TR/EN/DE)
+- Online randevu olusturma ve uygun saat kontrolu
+- Berber panelinden randevu listeleme, filtreleme ve durum guncelleme
+- Coklu hizmet secimi ve toplam fiyat hesaplama
+- Iletisim formu ve SMTP uzerinden e-posta bildirimleri
+- Cok dilli arayuz destegi (TR/EN/DE)
+- Django admin paneli ile icerik ve ayar yonetimi
 
-## Kurulum
+## Kullanilan Teknolojiler
 
-1. Sanal ortam olustur ve aktif et:
-   - Windows: `python -m venv venv && .\\venv\\Scripts\\activate`
-2. Bagimliliklari yukle:
+- Python 3
+- Django 5.2
+- SQLite (gelistirme ortami)
+- HTML, CSS, JavaScript
+
+## Yerel Kurulum
+
+1. Depoyu klonlayin:
+   - `git clone https://github.com/Samet-Batuhan/berber-randevu-sistemi.git`
+   - `cd berber-randevu-sistemi`
+2. Sanal ortami olusturun ve aktif edin:
+   - Windows: `python -m venv venv`
+   - Windows: `.\\venv\\Scripts\\activate`
+3. Bagimliliklari yukleyin:
    - `pip install -r requirements.txt`
-3. Ortam degiskenlerini hazirla:
-   - `.env.example` dosyasini `.env` olarak kopyala ve degerleri duzenle.
-4. Veritabani migrationlarini uygula:
+4. Ortam degiskenlerini hazirlayin:
+   - `.env.example` dosyasini `.env` olarak kopyalayin
+   - Gerekli degerleri kendi bilgilerinizle doldurun
+5. Veritabani migrationlarini uygulayin:
    - `python manage.py migrate`
-5. Uygulamayi baslat:
+6. Uygulamayi calistirin:
    - `python manage.py runserver`
+
+## Ortam Degiskenleri
+
+Ornek degiskenler `.env.example` dosyasinda bulunur.
+
+- `DJANGO_SECRET_KEY`
+- `DEBUG`
+- `ALLOWED_HOSTS`
+- `EMAIL_HOST_USER`
+- `EMAIL_HOST_PASSWORD`
 
 ## Guvenlik Notu
 
-Bu repoda gizli bilgiler tutulmamaktadir. `SECRET_KEY`, SMTP kullanici adi/sifre gibi degerler ortam degiskenlerinden okunur.
+Bu repoda gizli bilgi tutulmaz. `SECRET_KEY` ve e-posta SMTP bilgileri ortam degiskenlerinden okunur.
+
+## Lisans
+
+Bu proje `MIT` lisansi ile paylasilmaktadir. Detaylar icin `LICENSE` dosyasina bakabilirsiniz.
